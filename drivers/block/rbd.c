@@ -4072,7 +4072,7 @@ static int rbd_obj_method_sync(struct rbd_device *rbd_dev,
 
 	ret = ceph_osdc_call(osdc, oid, oloc, RBD_DRV_NAME, method_name,
 			     CEPH_OSD_FLAG_READ, req_page, outbound_size,
-			     reply_page, &inbound_size);
+			     &reply_page, &inbound_size);
 	if (!ret) {
 		memcpy(inbound, page_address(reply_page), inbound_size);
 		ret = inbound_size;
@@ -5098,7 +5098,7 @@ static int __get_parent_info(struct rbd_device *rbd_dev,
 
 	ret = ceph_osdc_call(osdc, &rbd_dev->header_oid, &rbd_dev->header_oloc,
 			     "rbd", "parent_get", CEPH_OSD_FLAG_READ,
-			     req_page, sizeof(u64), reply_page, &reply_len);
+			     req_page, sizeof(u64), &reply_page, &reply_len);
 	if (ret)
 		return ret == -EOPNOTSUPP ? 1 : ret;
 
@@ -5110,7 +5110,7 @@ static int __get_parent_info(struct rbd_device *rbd_dev,
 
 	ret = ceph_osdc_call(osdc, &rbd_dev->header_oid, &rbd_dev->header_oloc,
 			     "rbd", "parent_overlap_get", CEPH_OSD_FLAG_READ,
-			     req_page, sizeof(u64), reply_page, &reply_len);
+			     req_page, sizeof(u64), &reply_page, &reply_len);
 	if (ret)
 		return ret;
 
@@ -5141,7 +5141,7 @@ static int __get_parent_info_legacy(struct rbd_device *rbd_dev,
 
 	ret = ceph_osdc_call(osdc, &rbd_dev->header_oid, &rbd_dev->header_oloc,
 			     "rbd", "get_parent", CEPH_OSD_FLAG_READ,
-			     req_page, sizeof(u64), reply_page, &reply_len);
+			     req_page, sizeof(u64), &reply_page, &reply_len);
 	if (ret)
 		return ret;
 
